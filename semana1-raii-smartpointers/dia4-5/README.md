@@ -11,20 +11,27 @@ A small C++ exercise that wraps a raw heap buffer in a class following the RAII 
 
 ## Files
 
-- `raii_buffer.cpp` — the `RaiiBuffer` class plus a `main()` with three test scenarios (basic usage, move semantics, exception handling).
+- `include/RaiiBuffer.hpp` — the `RaiiBuffer` class (header-only, no `<iostream>` dependency unless `RAII_TRACE` is defined).
+- `examples/demo_raii_buffer.cpp` — a `main()` with three demo scenarios (basic usage, move semantics, exception handling), compiled with console traces on.
+- `tests/` — real tests with assertions and a non-zero exit code on failure, wired into CTest (`raii_construccion`, `raii_movimiento`).
 
 ## Build and run
 
-```bash
-g++ -std=c++17 -Wall -Wextra -o raii_buffer raii_buffer.cpp
-./raii_buffer
-```
-
-## Validate with Valgrind (Linux)
+From the repo root (see the [root README](../../README.md) for the full setup):
 
 ```bash
-g++ -std=c++17 -g -o raii_buffer raii_buffer.cpp
-valgrind --leak-check=full ./raii_buffer
+cmake -S . -B build
+cmake --build build -j
+ctest --test-dir build --output-on-failure -R raii_
+./build/semana1-raii-smartpointers/dia4-5/demo_raii_buffer
 ```
 
-Confirm the output ends with `All heap blocks were freed -- no leaks are possible`.
+## Validate with sanitizers
+
+```bash
+cmake -S . -B build-asan -DENABLE_SANITIZERS=ON
+cmake --build build-asan -j
+ctest --test-dir build-asan --output-on-failure -R raii_
+```
+
+Confirms there are no leaks (ASan) or undefined behavior (UBSan) across construction, move, and exception paths.

@@ -1,0 +1,13 @@
+add_library(ownership_lib INTERFACE)
+target_include_directories(ownership_lib INTERFACE include)
+
+add_executable(demo_dia1_ownership examples/demo_dia1_ownership.cpp)
+target_link_libraries(demo_dia1_ownership PRIVATE ownership_lib)
+
+add_executable(demo_dia2_unique_ptr examples/demo_dia2_unique_ptr.cpp)
+target_link_libraries(demo_dia2_unique_ptr PRIVATE ownership_lib)
+
+add_executable(demo_dia3_shared_weak examples/demo_dia3_shared_weak.cpp)
+target_link_libraries(demo_dia3_shared_weak PRIVATE ownership_lib)
+
+add_subdirectory(tests)

@@ -1,0 +1,11 @@
+add_executable(test_buffer_construccion test_construccion.cpp)
+target_link_libraries(test_buffer_construccion PRIVATE buffer_lib)
+add_test(NAME buffer_construccion COMMAND test_buffer_construccion)
+
+add_executable(test_buffer_copia test_copia.cpp)
+target_link_libraries(test_buffer_copia PRIVATE buffer_lib)
+add_test(NAME buffer_copia COMMAND test_buffer_copia)
+
+add_executable(test_buffer_movimiento test_movimiento.cpp)
+target_link_libraries(test_buffer_movimiento PRIVATE buffer_lib)
+add_test(NAME buffer_movimiento COMMAND test_buffer_movimiento)

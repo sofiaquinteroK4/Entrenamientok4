@@ -1,0 +1,7 @@
+add_executable(test_raii_construccion test_construccion.cpp)
+target_link_libraries(test_raii_construccion PRIVATE raii_buffer_lib)
+add_test(NAME raii_construccion COMMAND test_raii_construccion)
+
+add_executable(test_raii_movimiento test_movimiento.cpp)
+target_link_libraries(test_raii_movimiento PRIVATE raii_buffer_lib)
+add_test(NAME raii_movimiento COMMAND test_raii_movimiento)

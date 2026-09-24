@@ -1,0 +1,7 @@
+.DS_Store
+build/
+build-*/
+*.o
+*.exe
+raii_buffer
+buffer_rule_of_five

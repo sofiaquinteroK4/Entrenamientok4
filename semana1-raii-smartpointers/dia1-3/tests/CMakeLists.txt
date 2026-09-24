@@ -1,0 +1,11 @@
+add_executable(test_dia1_ownership test_dia1_ownership.cpp)
+target_link_libraries(test_dia1_ownership PRIVATE ownership_lib)
+add_test(NAME dia1_ownership COMMAND test_dia1_ownership)
+
+add_executable(test_dia2_unique_ptr test_dia2_unique_ptr.cpp)
+target_link_libraries(test_dia2_unique_ptr PRIVATE ownership_lib)
+add_test(NAME dia2_unique_ptr COMMAND test_dia2_unique_ptr)
+
+add_executable(test_dia3_shared_weak test_dia3_shared_weak.cpp)
+target_link_libraries(test_dia3_shared_weak PRIVATE ownership_lib)
+add_test(NAME dia3_shared_weak COMMAND test_dia3_shared_weak)

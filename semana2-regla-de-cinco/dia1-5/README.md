@@ -8,7 +8,7 @@ resource.
 ## Weekly plan
 
 - **Day 1 — const-correctness**: methods that don't modify the object
-  are marked `const` (`size()`, `direccion()`, `imprimir()`), and `at()`
+  are marked `const` (`size()`, `address()`, `print()`), and `at()`
   has a `const` overload that returns `const int&` for read-only
   objects. This lets `Buffer` be used through const references/objects
   without losing read functionality.
@@ -16,9 +16,12 @@ resource.
   because it manages a resource manually, it normally must also define
   copy and move (Rule of 5), or delegate the resource to a type that
   already manages itself, such as `std::vector` or `std::unique_ptr`
-  (Rule of 0). The copy constructor and copy assignment operator are
-  implemented with a **deep copy**: each object allocates its own block
-  of memory, independent from the original.
+  (Rule of 0). The copy constructor performs a **deep copy**: each
+  object allocates its own block of memory, independent from the
+  original. The copy assignment operator is implemented with
+  **copy-and-swap** (builds a temporary via the copy constructor, then
+  swaps it into `*this`), which also handles self-assignment correctly
+  with no explicit check.
 - **Day 3 — `std::move` / `std::forward`**: `std::move` is a cast to an
   rvalue reference that enables the move overload to be selected;
   `std::forward` is used in templates with forwarding references
@@ -26,36 +29,49 @@ resource.
   rvalue. The move constructor and move assignment operator are
   implemented (they steal the pointer with `std::exchange`, leaving the
   source as `nullptr`), plus a minimal `std::forward` example via
-  `reenviar_y_mostrar`.
-- **Day 4 — manual validation**: `demo_copia_duplica_recurso()` proves
-  that copying produces two distinct memory addresses and that
-  modifying the copy doesn't affect the original; `demo_mover_no_duplica()`
-  proves that moving keeps the SAME memory address in the destination
-  and leaves the source empty (no new allocation).
+  `forward_and_show`.
+- **Day 4 — manual validation**: `demo_copy_duplicates_resource()`
+  proves that copying produces two distinct memory addresses and that
+  modifying the copy doesn't affect the original; `demo_copy_assignment()`
+  proves the same for `operator=`; `demo_move_transfers_no_duplicate()`
+  and `demo_move_assignment()` prove that moving keeps the SAME memory
+  address in the destination and leaves the source empty (no new
+  allocation).
 - **Day 5 — self-review and commit**: compile with `-Wall -Wextra
   -Wpedantic` with no warnings, review the code, and commit the
   checkpoint.
 
 ## Files
 
-- `buffer_rule_of_five.cpp` — the `Buffer` class (full Rule of 5) plus a
-  `main()` with the four demonstrations (const-correctness, forwarding,
-  deep copy, move).
+- `include/Buffer.hpp` — the `Buffer` class (full Rule of 5, header-only,
+  no `<iostream>` dependency unless `BUFFER_TRACE` is defined; copy
+  assignment uses copy-and-swap).
+- `examples/demo_semana2.cpp` — a `main()` with the demonstrations
+  (const-correctness, forwarding, deep copy, copy assignment, move,
+  move assignment), compiled with console traces on.
+- `tests/` — real tests with assertions and a non-zero exit code on
+  failure, wired into CTest (`buffer_construccion`, `buffer_copia`,
+  `buffer_movimiento`).
 
 ## Build and run
 
-```bash
-g++ -std=c++17 -Wall -Wextra -Wpedantic -o buffer_rule_of_five buffer_rule_of_five.cpp
-./buffer_rule_of_five
-```
-
-## Validate with Valgrind (Linux)
+From the repo root (see the [root README](../../README.md) for the full setup):
 
 ```bash
-g++ -std=c++17 -g -o buffer_rule_of_five buffer_rule_of_five.cpp
-valgrind --leak-check=full ./buffer_rule_of_five
+cmake -S . -B build
+cmake --build build -j
+ctest --test-dir build --output-on-failure -R buffer_
+./build/semana2-regla-de-cinco/dia1-5/demo_semana2
 ```
 
-Confirm the output ends with `All heap blocks were freed -- no leaks
-are possible` and that no "invalid free" shows up (which would betray a
-shallow copy instead of a deep one).
+## Validate with sanitizers
+
+```bash
+cmake -S . -B build-asan -DENABLE_SANITIZERS=ON
+cmake --build build-asan -j
+ctest --test-dir build-asan --output-on-failure -R buffer_
+```
+
+Confirms there's no "invalid free" (which would betray a shallow copy
+instead of a deep one) and no leaks across copy, copy assignment, move,
+move assignment, and self-assignment.

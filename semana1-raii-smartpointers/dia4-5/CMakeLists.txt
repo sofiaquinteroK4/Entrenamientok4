@@ -1,0 +1,8 @@
+add_library(raii_buffer_lib INTERFACE)
+target_include_directories(raii_buffer_lib INTERFACE include)
+
+add_executable(demo_raii_buffer examples/demo_raii_buffer.cpp)
+target_link_libraries(demo_raii_buffer PRIVATE raii_buffer_lib)
+target_compile_definitions(demo_raii_buffer PRIVATE RAII_TRACE)
+
+add_subdirectory(tests)
