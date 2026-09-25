@@ -73,5 +73,8 @@ ctest --test-dir build-asan --output-on-failure -R buffer_
 ```
 
 Confirms there's no "invalid free" (which would betray a shallow copy
-instead of a deep one) and no leaks across copy, copy assignment, move,
-move assignment, and self-assignment.
+instead of a deep one) and no other invalid accesses across copy, copy
+assignment, move, move assignment, and self-assignment. To check for
+leaks on macOS, where ASan doesn't detect them, run
+`leaks --atExit -- ./build/semana2-regla-de-cinco/dia1-5/demo_semana2`
+(see the [root README](../../README.md)).

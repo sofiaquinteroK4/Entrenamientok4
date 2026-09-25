@@ -37,7 +37,8 @@ int main() {
         return 1;
     }
     if (receiver.address() == receiver_address_before) {
-        std::cerr << "FAIL: copy assignment did not free the receiver's previous block\n";
+        std::cerr << "FAIL: copy assignment kept the receiver's previous block instead of "
+                     "switching to a newly allocated one\n";
         return 1;
     }
     if (receiver.size() != original.size() || receiver.at(0) != 111) {

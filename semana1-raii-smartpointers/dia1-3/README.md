@@ -56,4 +56,6 @@ ctest --test-dir build-asan --output-on-failure -R dia[123]_
 Note on `demo_dia3_shared_weak`: the "broken cycle" demo deliberately
 creates a circular reference with `shared_ptr` to show the problem, but
 breaks it by hand (`raw1->next.reset()`) before it ends, so no real leak
-is left running under ASan/LeakSanitizer.
+is left at exit. On macOS, where ASan does not detect leaks, confirm it
+with `leaks --atExit -- ./build/semana1-raii-smartpointers/dia1-3/demo_dia3_shared_weak`
+(see the [root README](../../README.md)).

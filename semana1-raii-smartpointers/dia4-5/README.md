@@ -34,4 +34,4 @@ cmake --build build-asan -j
 ctest --test-dir build-asan --output-on-failure -R raii_
 ```
 
-Confirms there are no leaks (ASan) or undefined behavior (UBSan) across construction, move, and exception paths.
+Confirms there are no invalid memory accesses (ASan) or undefined behavior (UBSan) across construction, move, and exception paths. To check for leaks on macOS, where ASan doesn't detect them, run `leaks --atExit -- ./build/semana1-raii-smartpointers/dia4-5/demo_raii_buffer` (see the [root README](../../README.md)).
