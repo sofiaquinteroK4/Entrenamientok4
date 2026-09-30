@@ -48,7 +48,7 @@ class Buffer {
 public:
     // --- Constructor: resource acquisition (RAII) ---
     explicit Buffer(std::size_t size)
-        : size_(size), data_(size_ > 0 ? new int[size_]() : nullptr)
+        : size_(size), data_(size > 0 ? new int[size]() : nullptr)
     {
 #ifdef BUFFER_TRACE
         std::cout << "[Buffer] Constructor: " << size_ << " ints at "
@@ -140,23 +140,23 @@ public:
     // `at()` has two overloads: one for mutable objects (allows
     // writing) and one for const objects (read-only). The compiler
     // picks automatically based on the constness of the calling object.
-    int& at(std::size_t index) {
+    [[nodiscard]] int& at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("Index out of range in Buffer::at");
         }
         return data_[index];
     }
 
-    const int& at(std::size_t index) const {
+    [[nodiscard]] const int& at(std::size_t index) const {
         if (index >= size_) {
             throw std::out_of_range("Index out of range in Buffer::at");
         }
         return data_[index];
     }
 
-    std::size_t size() const { return size_; }
+    [[nodiscard]] std::size_t size() const noexcept { return size_; }
 
-    const void* address() const { return data_; }
+    [[nodiscard]] const void* address() const noexcept { return data_; }
 
 #ifdef BUFFER_TRACE
     void print(const std::string& label) const {

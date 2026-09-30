@@ -24,7 +24,7 @@ int main() {
     }
     bool source_throws = false;
     try {
-        source.at(0);
+        (void)source.at(0);
     } catch (const std::out_of_range&) {
         source_throws = true;
     }

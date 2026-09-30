@@ -45,6 +45,7 @@ int main() {
     basic_example();
     move_example();
     exception_example();
-    std::cout << "\nProgram finished with no memory leaks.\n";
+    std::cout << "\nProgram finished. To verify there are no leaks, run it under "
+                 "valgrind (Linux) or `leaks --atExit --` (macOS).\n";
     return 0;
 }

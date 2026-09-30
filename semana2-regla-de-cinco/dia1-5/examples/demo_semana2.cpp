@@ -150,6 +150,7 @@ int main() {
     demo_copy_assignment();
     demo_move_transfers_no_duplicate();
     demo_move_assignment();
-    std::cout << "\nProgram finished with no memory leaks.\n";
+    std::cout << "\nProgram finished. To verify there are no leaks, run it under "
+                 "valgrind (Linux) or `leaks --atExit --` (macOS).\n";
     return 0;
 }

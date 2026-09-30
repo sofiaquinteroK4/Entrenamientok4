@@ -46,6 +46,7 @@ void demo_custom_deleter() {
 int main() {
     demo_ownership_transfer();
     demo_custom_deleter();
-    std::cout << "\nProgram finished with no memory leaks.\n";
+    std::cout << "\nProgram finished. To verify there are no leaks, run it under "
+                 "valgrind (Linux) or `leaks --atExit --` (macOS).\n";
     return 0;
 }

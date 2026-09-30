@@ -43,6 +43,18 @@ int main() {
         return 1;
     }
 
+    bool const_threw = false;
+    try {
+        (void)read_only.at(100);
+    } catch (const std::out_of_range&) {
+        const_threw = true;
+    }
+    if (!const_threw) {
+        std::cerr << "FAIL: the const overload of at(100) should have thrown "
+                     "std::out_of_range\n";
+        return 1;
+    }
+
     std::cout << "OK: construction, zero-init, size 0, const-correctness, "
                  "and out-of-range at()\n";
     return 0;

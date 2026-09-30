@@ -30,7 +30,7 @@ public:
 
     // --- Constructor: resource acquisition (RAII), zero-initialized ---
     explicit Buffer(std::size_t size)
-        : size_(size), data_(size_ > 0 ? new int[size_]() : nullptr) {}
+        : size_(size), data_(size > 0 ? new int[size]() : nullptr) {}
 
     // --- Destructor: resource release ---
     ~Buffer() { delete[] data_; }
@@ -79,20 +79,20 @@ public:
     }
 
     // --- Iterators: the bridge to <algorithm> ---
-    iterator begin() { return data_; }
-    iterator end() { return data_ + size_; }
-    const_iterator begin() const { return data_; }
-    const_iterator end() const { return data_ + size_; }
+    [[nodiscard]] iterator begin() noexcept { return data_; }
+    [[nodiscard]] iterator end() noexcept { return data_ + size_; }
+    [[nodiscard]] const_iterator begin() const noexcept { return data_; }
+    [[nodiscard]] const_iterator end() const noexcept { return data_ + size_; }
 
     // --- Element access (const-correct, as in week 2) ---
-    int& at(std::size_t index) {
+    [[nodiscard]] int& at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("Index out of range in Buffer::at");
         }
         return data_[index];
     }
 
-    const int& at(std::size_t index) const {
+    [[nodiscard]] const int& at(std::size_t index) const {
         if (index >= size_) {
             throw std::out_of_range("Index out of range in Buffer::at");
         }
@@ -102,12 +102,12 @@ public:
     // Sets every element to `value`. Replaces a manual indexed loop.
     void fill(int value) { std::fill(begin(), end(), value); }
 
-    std::size_t size() const { return size_; }
-    bool empty() const { return size_ == 0; }
+    [[nodiscard]] std::size_t size() const noexcept { return size_; }
+    [[nodiscard]] bool empty() const noexcept { return size_ == 0; }
 
     // Same name as std::vector::data(). Used by the tests to compare
     // addresses (deep copy vs move).
-    const int* data() const { return data_; }
+    [[nodiscard]] const int* data() const noexcept { return data_; }
 
 private:
     std::size_t size_;

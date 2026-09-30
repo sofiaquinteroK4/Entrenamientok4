@@ -163,6 +163,7 @@ int main() {
     demo_transform(numbers);
     demo_sort(numbers); // takes a copy: 'numbers' stays unsorted
 
-    std::cout << "\nProgram finished with no memory leaks.\n";
+    std::cout << "\nProgram finished. To verify there are no leaks, run it under "
+                 "valgrind (Linux) or `leaks --atExit --` (macOS).\n";
     return 0;
 }

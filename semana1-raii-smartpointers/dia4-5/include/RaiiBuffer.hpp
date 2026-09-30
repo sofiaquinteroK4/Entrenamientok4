@@ -25,7 +25,7 @@ class RaiiBuffer {
 public:
     // --- Constructor: this is the "A" in RAII (Acquisition) ---
     explicit RaiiBuffer(std::size_t size)
-        : size_(size), data_(size_ > 0 ? new int[size_]() : nullptr)
+        : size_(size), data_(size > 0 ? new int[size]() : nullptr)
     {
 #ifdef RAII_TRACE
         std::cout << "[RaiiBuffer] Constructor: allocating "
@@ -82,14 +82,14 @@ public:
     }
 
     // --- Safe access to the data ---
-    int& at(std::size_t index) {
+    [[nodiscard]] int& at(std::size_t index) {
         if (index >= size_) {
             throw std::out_of_range("Index out of range in RaiiBuffer::at");
         }
         return data_[index];
     }
 
-    std::size_t size() const { return size_; }
+    [[nodiscard]] std::size_t size() const noexcept { return size_; }
 
 private:
     std::size_t size_;
