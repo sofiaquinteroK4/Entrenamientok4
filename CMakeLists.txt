@@ -9,7 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-add_compile_options(-Wall -Wextra -Wpedantic)
+add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wconversion)
 
 option(ENABLE_SANITIZERS "Build with -fsanitize=address,undefined" OFF)
 if(ENABLE_SANITIZERS)
@@ -23,3 +23,4 @@ add_subdirectory(semana1-raii-smartpointers/dia1-3)
 add_subdirectory(semana1-raii-smartpointers/dia4-5)
 add_subdirectory(semana2-regla-de-cinco/dia1-5)
 add_subdirectory(semana3-stl-testing/dia1-5)
+add_subdirectory(semana4-imagebuffer/dia1-5)

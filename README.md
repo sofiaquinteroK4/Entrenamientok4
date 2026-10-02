@@ -14,6 +14,7 @@ external frameworks.
 | `semana1-raii-smartpointers/dia4-5/` | Week 1, Days 4-5 | RAII over a raw buffer (`RaiiBuffer`, move-only) | Done |
 | `semana2-regla-de-cinco/dia1-5/` | Week 2, Days 1-5 | const-correctness + Rule of 3/5/0 + deep copy + move (`Buffer`) | Done |
 | `semana3-stl-testing/dia1-5/` | Week 3 | Idiomatic STL (`<algorithm>` instead of manual loops) + unit testing fundamentals + CTest (`Buffer` with iterators) | Done |
+| `semana4-imagebuffer/dia1-5/` | Week 4 | Consolidation: `ImageBuffer` (RAII + Rule of 5 + STL), edge-case CTest suite, sanitizers and leak checks | Done |
 
 ## Build and test (whole repo)
 
@@ -23,8 +24,10 @@ cmake --build build -j
 ctest --test-dir build --output-on-failure
 ```
 
-This compiles every week with `-Wall -Wextra -Wpedantic` and runs every
-`add_test()` in the repo (one per case: construction, copy, move...).
+This compiles every week with `-Wall -Wextra -Wpedantic -Wshadow
+-Wconversion` and runs every `add_test()` in the repo (one per case:
+construction, copy, move...), plus Week 4's leak checks (label
+`memcheck`, see below).
 
 ### With sanitizers (ASan + UBSan)
 
@@ -55,6 +58,10 @@ done
 
 Each line should report `0 leaks for 0 total leaked bytes`.
 
+Week 4 automates this: `ctest --test-dir build -L memcheck` runs its
+tests and demo under valgrind (if installed) or `leaks`, and fails if
+anything leaks. See the [Week 4 README](semana4-imagebuffer/dia1-5/README.md).
+
 ### Running the demos (with console traces)
 
 The `examples/` executables do print traces (`RAII_TRACE` / `BUFFER_TRACE`
@@ -67,6 +74,7 @@ where it applies), unlike the library and the tests:
 ./build/semana1-raii-smartpointers/dia4-5/demo_raii_buffer
 ./build/semana2-regla-de-cinco/dia1-5/demo_semana2
 ./build/semana3-stl-testing/dia1-5/demo_semana3
+./build/semana4-imagebuffer/dia1-5/demo_imagebuffer
 ```
 
 ## Note on the environment

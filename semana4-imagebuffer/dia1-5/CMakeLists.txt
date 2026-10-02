@@ -1,0 +1,7 @@
+add_library(imagebuffer_lib INTERFACE)
+target_include_directories(imagebuffer_lib INTERFACE include)
+
+add_executable(demo_imagebuffer examples/demo_imagebuffer.cpp)
+target_link_libraries(demo_imagebuffer PRIVATE imagebuffer_lib)
+
+add_subdirectory(tests)
